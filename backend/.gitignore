@@ -1,0 +1,19 @@
+# Variables d'environnement — ne jamais committer
+.env
+
+# Binaires compilés
+tmp/
+main
+server
+
+# Dossier uploads (images produits)
+uploads/
+
+# Dépendances vendor (si utilisé)
+vendor/
+
+# Logs
+*.log
+
+# Fichiers système macOS
+.DS_Store

@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* ============================================
+   ADVANCE VISION — Design System
+   Tokens de couleurs officiels du projet
+   ============================================ */
+
+@theme inline {
+  /* Couleur principale — Bleu marine Advance Vision */
+  --color-primary:       #001F91;
+  --color-primary-light: rgba(0, 31, 145, 0.10);
+  --color-primary-hover: #001570;
+  --color-primary-dark:  #000F52;
+
+  /* Blanc principal (légèrement chaud — jamais #FFFFFF pur) */
+  --color-white:         #FFFFFC;
+  --color-white-pure:    #FFFFFF;
+
+  /* Textes */
+  --color-ink:           #0D0D0D;
+  --color-ink-soft:      #1A1A1A;
+  --color-ink-muted:     #5C5C5C;
+
+  /* Surfaces et bordures */
+  --color-surface:       #F5F5F3;
+  --color-surface-border: #E8E8E8;
+
+  /* États fonctionnels */
+  --color-success:       #2A9D6E;
+  --color-warning:       #E9A84C;
+  --color-error:         #D94F4F;
+
+  /* Typographie */
+  --font-sans:    var(--font-body), sans-serif;
+  --font-display: var(--font-display), sans-serif;
+}
+
+/* Base globale */
+body {
+  background-color: #FFFFFC;
+  color: #0D0D0D;
+  font-family: Arial, Helvetica, sans-serif;
+}
