@@ -1,4 +1,4 @@
-# CLAUDE.md — Advance Vision E-commerce Project
+# CLAUDE.md — Les Opticiens Mobiles
 
 > Ce fichier est la source de vérité pour Claude dans ce projet.
 > Il doit être placé dans `.claude/CLAUDE.md`.
@@ -8,23 +8,42 @@
 
 ## 1. VUE D'ENSEMBLE DU PROJET
 
-**Advance Vision** est une plateforme e-commerce web pour une maison d'optique ivoirienne.
-Elle couvre la vente en ligne de lunettes (vue, solaires, sport, luxe), la gestion des ordonnances,
-la prise de rendez-vous et un backoffice d'administration complet.
+**Les Opticiens Mobiles** est une plateforme e-commerce et de services optiques 100% en ligne, pour le marché ivoirien.
+
+Ce n'est pas une simple vitrine. C'est un service complet qui combine :
+- **La vente en ligne** de lunettes (vue, solaires, sport, luxe)
+- **Les tests de vue à domicile** : un opticien se déplace chez le client pour réaliser l'examen de vue
+- **L'essayage à domicile** : un opticien ou livreur se déplace avec une sélection de paires pour essayage sur place
+- **La prise de mesures à domicile** : mesure interpupillaire et autres mesures nécessaires à la fabrication des verres
+- **La gestion des ordonnances**, la prise de rendez-vous et un backoffice d'administration complet
+
+**Différenciateur clé :** L'aspect service mobile (déplacement à domicile) est le cœur de l'offre et doit être mis en avant dès la page d'accueil.
 
 **Marché cible :** Côte d'Ivoire et Afrique francophone (16–65 ans).
 **Langues :** Français uniquement.
 **Devise :** FCFA.
 
+### Logique de tarification des déplacements
+- Les gestionnaires définissent un tarif de déplacement en FCFA selon la distance (zones géographiques ou tarif kilométrique)
+- Le client voit le coût du déplacement estimé avant de confirmer sa demande
+- Ce montant est débité en plus du prix des lunettes, ou comme service autonome (test de vue sans achat)
+
 ---
 
 ## 2. CHARTE GRAPHIQUE & DESIGN SYSTEM
+
+### Inspiration UX/UI
+
+Le site public **Les Opticiens Mobiles** doit s'inspirer de l'UX de Polette.com et Lunettespourtous.com : navigation épurée, produits larges et aérés, prix toujours visibles, CTAs clairs, processus de commande sans friction. L'aspect service mobile (déplacement à domicile) doit être mis en avant dès la page d'accueil comme différenciateur clé.
+
+- **https://www.polette.com/** — navigation claire, mise en avant des produits, tunnel d'achat simplifié
+- **https://lunettespourtous.com/** — approche accessible et prix transparents
 
 ### Palette de couleurs
 
 ```css
 :root {
-  /* Couleur principale — Bleu marine Advance Vision */
+  /* Couleur principale — Bleu marine Les Opticiens Mobiles */
   --color-primary:        #001F91;                 /* bleu marine profond */
   --color-primary-light:  rgba(0, 31, 145, 0.10);  /* fonds subtils, badges */
   --color-primary-hover:  #001570;                 /* hover boutons */
@@ -140,9 +159,9 @@ export default config
 - **Containerisation :** Docker + docker-compose
 
 ### Frontend
-- **Framework :** Next.js 14+ (App Router)
+- **Framework :** Next.js 16 (App Router) — **pas Next.js 14**
 - **Langage :** TypeScript (strict mode)
-- **Styles :** Tailwind CSS + shadcn/ui
+- **Styles :** Tailwind CSS v4 (configuration CSS-first via `@theme` dans `globals.css` — **pas de tailwind.config.ts**)
 - **State management :** Zustand + TanStack Query
 - **Formulaires :** React Hook Form + Zod
 - **Paiements :** CinetPay (Orange Money, MTN, Moov, CB)
@@ -158,7 +177,7 @@ export default config
 ## 4. STRUCTURE DU PROJET
 
 ```
-advance-vision/
+advance-vision/               ← nom technique du dossier racine (inchangé)
 ├── .claude/
 │   ├── CLAUDE.md              ← CE FICHIER
 │   ├── settings.json
@@ -180,21 +199,26 @@ advance-vision/
 │   │   ├── routes/
 │   │   └── utils/
 │   ├── migrations/
+│   ├── seed/
 │   ├── Dockerfile
 │   ├── go.mod
 │   └── go.sum
 │
 └── frontend/
     ├── app/
-    │   ├── (public)/
+    │   ├── page.tsx               ← Page d'accueil
+    │   ├── catalogue/
+    │   ├── produit/[slug]/
+    │   ├── rendez-vous/
     │   ├── (auth)/
     │   ├── (client)/
     │   └── (admin)/
     ├── components/
-    │   ├── ui/
-    │   ├── layout/
-    │   ├── catalog/
+    │   ├── ui/                    ← ScrollReveal, etc.
+    │   ├── layout/                ← Header, Footer
+    │   ├── catalog/               ← ProductCard, CatalogueFilters, Pagination
     │   ├── product/
+    │   ├── appointment/           ← AppointmentForm
     │   ├── cart/
     │   ├── account/
     │   └── admin/
@@ -206,7 +230,6 @@ advance-vision/
     ├── stores/
     ├── types/
     ├── Dockerfile
-    ├── tailwind.config.ts
     └── package.json
 ```
 
@@ -220,29 +243,31 @@ advance-vision/
 
 ---
 
-### MVP 1 — Fondations & Catalogue (Priorité absolue)
+### MVP 1 — Fondations & Catalogue ✅ (terminé)
 > **Objectif :** Un site accessible, avec des produits affichables et filtrables.
-> À ce stade : pas de compte, pas de panier. Juste voir les produits.
 
 **Backend :**
-- [ ] Setup Go + Fiber + GORM + PostgreSQL + Docker
-- [ ] Modèles : `Product`, `Category`, `Brand`, `LensOption`
-- [ ] `GET /api/v1/health`
-- [ ] `GET /api/v1/products` — liste + filtres + pagination
-- [ ] `GET /api/v1/products/:slug` — détail produit
-- [ ] `GET /api/v1/categories`
-- [ ] `GET /api/v1/brands`
-- [ ] Seed de données de test (10 produits minimum)
+- [x] Setup Go + Fiber + GORM + PostgreSQL + Docker
+- [x] Modèles : `Product`, `Category`, `Brand`, `LensOption`
+- [x] `GET /api/v1/health`
+- [x] `GET /api/v1/products` — liste + filtres + pagination
+- [x] `GET /api/v1/products/:slug` — détail produit
+- [x] `GET /api/v1/categories`
+- [x] `GET /api/v1/brands`
+- [x] Seed de données de test (10 produits, 4 catégories, 5 marques, 5 options verres)
 
 **Frontend :**
-- [ ] Setup Next.js 14 + TypeScript + Tailwind + tokens couleurs
-- [ ] Layout global (Header + Footer) aux couleurs Advance Vision
-- [ ] Page d'accueil (hero + quelques produits mis en avant)
-- [ ] Page catalogue `/catalogue` avec filtres et grille produits
-- [ ] Page fiche produit `/produit/[slug]`
-- [ ] Client API `lib/api.ts` connecté au backend
+- [x] Setup Next.js 16 + TypeScript + Tailwind v4 + tokens couleurs
+- [x] Layout global (Header + Footer) aux couleurs Les Opticiens Mobiles
+- [x] Page d'accueil (hero + produits mis en avant + avantages)
+- [x] Page catalogue `/catalogue` avec filtres (catégorie, genre, prix, marque) et grille produits
+- [x] Page fiche produit `/produit/[slug]` avec caractéristiques et options verres
+- [x] Page rendez-vous `/rendez-vous` avec formulaire interactif
+- [x] Client API `lib/api.ts` connecté au backend
+- [x] Composant `ScrollReveal` (effet zoom au scroll)
+- [x] Images placeholder Unsplash — lunettes de vue pharmaceutiques
 
-**Critère de validation :** On peut naviguer, filtrer et voir les produits sur le vrai backend.
+**Critère de validation :** ✅ On peut naviguer, filtrer et voir les produits sur le vrai backend.
 
 ---
 
@@ -296,10 +321,10 @@ advance-vision/
 ---
 
 ### MVP 4 — Backoffice Admin de base
-> **Objectif :** L'équipe Advance Vision peut gérer produits et commandes sans toucher à la base de données.
+> **Objectif :** L'équipe Les Opticiens Mobiles peut gérer produits et commandes sans toucher à la base de données.
 
 **Backend :**
-- [ ] Routes admin protégées par rôle `gestionnaire` et `super_admin`
+- [ ] Routes admin protégées par rôle `admin`
 - [ ] CRUD produits avec upload photo (stockage local)
 - [ ] CRUD catégories et marques
 - [ ] `GET /api/v1/admin/orders` — toutes les commandes
@@ -317,7 +342,39 @@ advance-vision/
 
 ---
 
-### MVP 5 — Ordonnances & Personnalisation verres
+### MVP 5 — Module Déplacements (service mobile à domicile)
+> **Objectif :** Permettre aux clients de demander un déplacement d'opticien ou livreur à domicile, avec tarification transparente.
+
+**Backend :**
+- [ ] Modèles : `MobileRequest`, `DeploymentZone`, `MobileAssignment`
+- [ ] `POST /api/v1/mobile-requests` — créer une demande de déplacement
+- [ ] `GET /api/v1/mobile-requests` — liste des demandes du client connecté
+- [ ] `GET /api/v1/mobile-requests/:id` — détail d'une demande
+- [ ] `POST /api/v1/mobile-requests/:id/cancel` — annuler une demande
+- [ ] `GET /api/v1/deployment-zones` — liste des zones avec tarifs (public)
+- [ ] `POST /api/v1/deployment-zones/estimate` — estimer le tarif pour une adresse
+- [ ] `GET /api/v1/admin/mobile-requests` — toutes les demandes (admin)
+- [ ] `PUT /api/v1/admin/mobile-requests/:id/assign` — assigner un opticien/livreur
+- [ ] `PUT /api/v1/admin/mobile-requests/:id/status` — mettre à jour le statut
+- [ ] `CRUD /api/v1/admin/deployment-zones` — gérer les zones et tarifs
+
+**Frontend client :**
+- [ ] Page `/services` présentant les 3 services mobiles (test vue, essayage, mesures)
+- [ ] Formulaire de demande de déplacement avec sélection du service, créneau, adresse
+- [ ] Affichage du tarif estimé avant confirmation
+- [ ] Suivi de la demande dans l'espace client
+
+**Frontend backoffice (admin) :**
+- [ ] Dashboard : liste des demandes en attente d'assignation
+- [ ] Assignation opticien/livreur à une demande
+- [ ] Gestion des zones géographiques et leurs tarifs
+- [ ] Agenda des opticiens et livreurs
+
+**Critère de validation :** Un client peut demander un test de vue à domicile, voir le tarif estimé, et un dispatcher peut assigner un opticien mobile.
+
+---
+
+### MVP 6 — Ordonnances & Personnalisation verres
 > **Objectif :** Permettre la commande de lunettes de vue avec ordonnance.
 
 **Backend :**
@@ -336,22 +393,23 @@ advance-vision/
 
 ---
 
-### MVP 6 — Paiements réels (CinetPay)
-> **Objectif :** Intégrer les paiements Mobile Money et CB pour la Côte d'Ivoire.
+### MVP 7 — Paiements réels (CinetPay)
+> **Objectif :** Intégrer les paiements Mobile Money et CB — lunettes + frais de déplacement dans la même transaction.
 
 - [ ] Intégration CinetPay (Orange Money, MTN, Moov, CB)
 - [ ] Webhook confirmation paiement côté backend
 - [ ] Mise à jour automatique statut commande après paiement
 - [ ] Gestion paiements en attente / échecs
 - [ ] Interface admin : validation paiements
+- [ ] Prise en charge des frais de déplacement dans le montant total
 
-**Critère de validation :** Paiement Orange Money réel sur commande test.
+**Critère de validation :** Paiement Orange Money réel sur commande test incluant des frais de déplacement.
 
 ---
 
 ### PHASE 2 — Fonctionnalités avancées (après MVP stable)
 
-- **Prise de rendez-vous** : calendrier, confirmation SMS (Africa's Talking)
+- **Prise de rendez-vous calendrier** : agenda interactif, confirmation SMS (Africa's Talking)
 - **Wishlist** : liste de souhaits client
 - **Codes promotionnels** : gestion admin + saisie tunnel commande
 - **Essai virtuel** : module webcam / photo (API tierce)
@@ -389,7 +447,7 @@ type APIResponse struct {
 ### API REST
 
 - Versioning : `/api/v1/...`
-- Ressources en minuscules pluriel : `/products`, `/orders`
+- Ressources en minuscules pluriel : `/products`, `/orders`, `/mobile-requests`
 - Codes HTTP respectés : 200, 201, 400, 401, 403, 404, 422, 500
 - Pagination : `?page=1&limit=20` → `{ total, page, pages, data[] }`
 
@@ -473,10 +531,30 @@ Cela signifie fournir dans l'ordre, avec validation à chaque étape :
 - Prix toujours en **FCFA** (entier, pas de décimales)
 - Une commande peut contenir des montures avec ou sans verres
 - Une monture avec verres → ordonnance obligatoire
-- Le workflow lunettes de vue inclut un **rendez-vous obligatoire** avant finalisation
-- Rôles : `super_admin`, `gestionnaire`, `opticien`, `client`
-- L'admin peut modifier la monture d'une commande tant que le RDV n'est pas finalisé
+- Le workflow lunettes de vue inclut un **rendez-vous ou déplacement opticien** avant finalisation
 - Paiements : Orange Money, MTN Money, Moov Money, CB (Visa/MC), Espèces à la livraison
+
+### Rôles utilisateurs
+
+Tout le monde s'inscrit comme `client` par défaut. Seul un `admin` peut changer le rôle d'un utilisateur depuis le backoffice.
+
+| Rôle       | Accès par défaut | Description |
+|------------|------------------|-------------|
+| `client`   | Espace client     | Commandes, historique, demandes de déplacement, ordonnances |
+| `admin`    | Dashboard admin complet | Produits, commandes, clients, zones/tarifs, dispatch missions, gestion des rôles |
+| `opticien` | Dashboard opticien | Ses missions assignées (déplacements, tests de vue, essayages) |
+| `livreur`  | Dashboard livreur  | Ses livraisons et essayages à domicile assignés |
+
+**Règle importante :** Seul un `admin` peut promouvoir un `client` vers `admin`, `opticien` ou `livreur`. Le dashboard s'adapte automatiquement selon le rôle connecté.
+
+### Modèles du module déplacements
+
+- **`MobileRequest`** : demande de déplacement
+  - Champs : type (`test_vue` / `essayage` / `prise_mesures` / `livraison`), adresse client, créneau souhaité, statut, opticien ou livreur assigné, tarif déplacement calculé, distance estimée
+- **`DeploymentZone`** : zones géographiques avec tarifs
+  - Champs : nom zone, description, tarif FCFA, distance max en km
+- **`MobileAssignment`** : assignation d'un opticien mobile ou livreur
+  - Champs : date, heure, notes, statut (`assigné` / `en_route` / `arrivé` / `terminé`)
 
 ---
 
@@ -484,11 +562,11 @@ Cela signifie fournir dans l'ordre, avec validation à chaque étape :
 
 ### Backend (`backend/.env`)
 ```env
-PORT=8080
+PORT=8081
 ENV=development
 
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5433
 DB_USER=postgres
 DB_PASSWORD=password
 DB_NAME=advance_vision
@@ -522,29 +600,37 @@ NEXT_PUBLIC_CINETPAY_KEY=
 ## 10. DÉCISIONS TECHNIQUES VALIDÉES
 
 ### Docker Compose — Stratégie dev/prod (validé)
-- **Dev :** Docker Compose gère uniquement **PostgreSQL + Adminer**. Go lancé avec `air`, Next.js avec `npm run dev` directement en local.
+- **Dev :** Docker Compose gère uniquement **PostgreSQL (port 5433) + Adminer (port 8888)**. Go lancé avec `air`, Next.js avec `npm run dev` directement en local.
 - **Prod :** `docker-compose.prod.yml` — tout dans Docker (PostgreSQL + Backend + Frontend).
 - Raison : hot reload natif, debug facile, friction minimale en développement actif.
+- **Note ports :** PostgreSQL sur 5433 (conflit avec PostgreSQL 14 Homebrew sur 5432), backend sur 8081 (conflit Jenkins sur 8080).
+
+### Tailwind CSS v4 — Configuration CSS-first (validé)
+- Pas de `tailwind.config.ts` — configuration via `@theme` dans `frontend/app/globals.css`
+- Import : `@import "tailwindcss";` puis `@theme inline { ... }`
+
+### Next.js 16 — App Router (validé)
+- `searchParams` dans les pages est une `Promise` → toujours `await searchParams`
+- `params` dans les pages dynamiques est une `Promise` → toujours `await params`
 
 ### Modèle `Product` — Enrichi dès le départ (validé)
 - Inclure dès MVP 1 : `gender` (homme/femme/enfant/mixte), `frame_shape`, `material`, `frame_color`
-- Ne pas attendre MVP 5 pour enrichir le modèle
 
 ### `LensOption` — Relation avec `Product` (validé)
 - `LensOption` est une table de référence indépendante liée à **tous les produits**
 - Relation many-to-many entre `Product` et `LensOption`
 
 ### Images produits — Workflow (validé)
-- L'utilisateur fournit les images ; Claude indique où les placer dans le projet
-- Upload admin géré lors de la phase d'authentification (MVP 2 étendu)
-- Seed de données MVP 1 : référence des fichiers images locaux
+- Placeholder : pool de photos Unsplash (`images.unsplash.com`) ciblées lunettes pharmaceutiques
+- L'utilisateur fournira les vraies photos ; elles seront placées dans `backend/uploads/`
+- Upload admin géré lors de MVP 4
 
 ---
 
 ## 11. COMMANDES UTILES
 
 ```bash
-# Démarrer l'environnement complet
+# Démarrer la base de données (PostgreSQL + Adminer)
 docker-compose up -d
 
 # Backend Go avec hot reload
@@ -558,7 +644,40 @@ cd backend && swag init -g cmd/server/main.go
 
 # Build production
 docker-compose -f docker-compose.prod.yml up --build
+
+# Vérifier que l'API répond
+curl http://localhost:8081/api/v1/health
+curl http://localhost:8081/api/v1/products
 ```
+
+---
+
+## 12. ÉTAT D'AVANCEMENT
+
+> Dernière mise à jour : avril 2026
+
+### MVP 1 — ✅ Terminé
+
+**Backend (100%) :**
+- Infrastructure Docker : PostgreSQL sur port 5433, Adminer sur 8888
+- Serveur Go + Fiber sur port 8081
+- Modèles : `Product`, `Category`, `Brand`, `LensOption`, `ProductImage`
+- 5 endpoints publics opérationnels : `/health`, `/products`, `/products/:slug`, `/categories`, `/brands`
+- Seed : 4 catégories, 5 marques, 5 options verres, 10 produits avec associations
+
+**Frontend (100%) :**
+- Next.js 16 + TypeScript + Tailwind v4 (CSS-first)
+- Layout global : `Header` (avec bouton Rendez-vous) + `Footer`
+- Page d'accueil : hero + produits mis en avant + section avantages
+- Page catalogue `/catalogue` : grille produits + filtres sidebar (catégorie, genre, prix, marque) + pagination
+- Page fiche produit `/produit/[slug]` : image, caractéristiques, options verres, badges stock, fil d'Ariane
+- Page rendez-vous `/rendez-vous` : formulaire interactif avec types, créneaux, confirmation animée
+- `ScrollReveal` : effet zoom + fondu au scroll (Intersection Observer)
+- Images placeholder : photos Unsplash lunettes pharmaceutiques
+
+### MVP 2 — 🔲 À démarrer
+
+Prochaine étape : système d'authentification (inscription, connexion, JWT, espace client).
 
 ---
 
