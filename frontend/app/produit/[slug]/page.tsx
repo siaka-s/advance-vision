@@ -21,21 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const PRESCRIPTION_GLASSES_PHOTOS = [
-  "1574258495973-f010dfbb5371",
-  "1508296695146-257a814070b4",
-  "1516825295064-c75760b5b2b8",
-  "1591076482161-42ce6305b763",
-  "1549036615-8494fa1ae61c",
-  "1571513722275-4ad6f5e79e88",
-  "1477543697173-39c2e3f53c54",
-  "1577401239170-897942555fb3",
-]
+const HERO_IMAGES = ["/images/hero/slide-1.jpg", "/images/hero/slide-2.jpg", "/images/hero/slide-3.jpg"]
 
 function getImageSrc(url?: string, productId?: number): string {
   if (url && !url.startsWith("/uploads/")) return url
-  const photoId = PRESCRIPTION_GLASSES_PHOTOS[(productId ?? 0) % PRESCRIPTION_GLASSES_PHOTOS.length]
-  return `https://images.unsplash.com/photo-${photoId}?w=800&h=800&fit=crop&q=85&auto=format`
+  return HERO_IMAGES[(productId ?? 0) % HERO_IMAGES.length]
 }
 
 export default async function ProductPage({ params }: PageProps) {

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"advance-vision/backend/internal/handlers"
+	"advance-vision/backend/internal/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,6 +13,7 @@ type Handlers struct {
 	Category *handlers.CategoryHandler
 	Brand    *handlers.BrandHandler
 	Product  *handlers.ProductHandler
+	Auth     *handlers.AuthHandler
 }
 
 // Setup enregistre toutes les routes de l'API
@@ -27,4 +29,14 @@ func Setup(app *fiber.App, h *Handlers) {
 	api.Get("/brands", h.Brand.GetBrands)
 	api.Get("/products", h.Product.GetProducts)
 	api.Get("/products/:slug", h.Product.GetProductBySlug)
+
+	// Authentification — routes publiques
+	auth := api.Group("/auth")
+	auth.Post("/register", h.Auth.Register)
+	auth.Post("/login", h.Auth.Login)
+	auth.Post("/logout", h.Auth.Logout)
+
+	// Utilisateur connecté — routes protégées
+	users := api.Group("/users", middleware.RequireAuth())
+	users.Get("/me", h.Auth.Me)
 }

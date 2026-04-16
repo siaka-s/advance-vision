@@ -43,6 +43,7 @@ func AutoMigrate(db *gorm.DB) error {
 		&models.LensOption{},
 		&models.Product{},
 		&models.ProductImage{},
+		&models.User{},
 	)
 	if err != nil {
 		return err

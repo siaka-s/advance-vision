@@ -7,26 +7,13 @@ interface ProductCardProps {
   product: Product
 }
 
-// Pool de photos Unsplash — lunettes de vue pharmaceutiques
-// Chaque produit reçoit toujours la même image grâce au modulo sur son ID
-const PRESCRIPTION_GLASSES_PHOTOS = [
-  "1574258495973-f010dfbb5371", // lunettes rectangulaires noires classiques
-  "1508296695146-257a814070b4", // montures rondes dorées sur table
-  "1516825295064-c75760b5b2b8", // lunettes de vue en présentoir
-  "1591076482161-42ce6305b763", // montures fines acetate
-  "1549036615-8494fa1ae61c",    // lunettes de vue portées
-  "1571513722275-4ad6f5e79e88", // montures métal argent
-  "1477543697173-39c2e3f53c54", // lunettes de vue posées
-  "1577401239170-897942555fb3", // montures fine noires portées
-]
+// Images locales du slider hero — cyclées par ID produit
+const HERO_IMAGES = ["/images/hero/slide-1.jpg", "/images/hero/slide-2.jpg", "/images/hero/slide-3.jpg"]
 
 function getImageSrc(product: Product): string {
   const localImage = product.images?.[0]?.url
-  if (localImage && !localImage.startsWith("/uploads/")) {
-    return localImage
-  }
-  const photoId = PRESCRIPTION_GLASSES_PHOTOS[product.id % PRESCRIPTION_GLASSES_PHOTOS.length]
-  return `https://images.unsplash.com/photo-${photoId}?w=400&h=400&fit=crop&q=80&auto=format`
+  if (localImage && !localImage.startsWith("/uploads/")) return localImage
+  return HERO_IMAGES[product.id % HERO_IMAGES.length]
 }
 
 export default function ProductCard({ product }: ProductCardProps) {

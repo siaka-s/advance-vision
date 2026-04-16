@@ -22,7 +22,7 @@ const links = [
     title: "Informations",
     items: [
       { label: "À propos", href: "/a-propos" },
-      { label: "Nos magasins", href: "/magasins" },
+      { label: "Zone de service", href: "/zone-service" },
       { label: "Contact", href: "/contact" },
     ],
   },
